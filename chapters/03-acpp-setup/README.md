@@ -120,7 +120,7 @@ Benefits:
 | Backend | Runtime Required | Notes |
 |---------|------------------|-------|
 | NVIDIA CUDA | CUDA Toolkit >= 10 | cuda-runtime + cuda-nvvm |
-| AMD ROCm | ROCm >= 4 | Verify with hip-runtime-amd + rocm-device-libs |
+| AMD ROCm | ROCm >= 4 | hip-runtime-amd + rocm-device-libs |
 | Intel OpenCL | Intel Compute Runtime | Any system installed OpenCL impl or pocl-cpu conda package |
 | CPU (OpenMP) | None (built-in) | Always available |
 
