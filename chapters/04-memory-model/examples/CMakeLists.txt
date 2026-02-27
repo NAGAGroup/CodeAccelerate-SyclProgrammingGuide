@@ -1,2 +1,3 @@
-# Examples for chapter 04 will be added here
 cmake_minimum_required(VERSION 3.20)
+add_acpp_example(buffer_policies buffer_policies.cpp)
+add_acpp_example(usm_vector_add usm_vector_add.cpp)
