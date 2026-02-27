@@ -1,2 +1,4 @@
-# Examples for chapter 06 will be added here
 cmake_minimum_required(VERSION 3.20)
+
+add_acpp_example(jit_specialized jit_specialized.cpp)
+add_acpp_example(accessor_variants_demo accessor_variants_demo.cpp)
