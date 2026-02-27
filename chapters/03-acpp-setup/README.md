@@ -8,7 +8,6 @@ Before installing AdaptiveCpp, ensure you have the following:
 
 - Linux x86-64 operating system
 - pixi package manager (https://prefix.dev/)
-- A C++17-capable compiler (GCC 8+, Clang 7+)
 - Hardware with an OpenCL/CUDA/ROCm/CPU capable runtime
 
 ## Installation via Pixi (Recommended)
