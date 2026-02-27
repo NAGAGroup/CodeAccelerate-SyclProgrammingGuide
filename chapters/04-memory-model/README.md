@@ -46,11 +46,12 @@ q.submit([&](sycl::handler& cgh) {
 AdaptiveCpp provides explicit buffer factory methods that make the behavior of buffers clear and predictable. These are the ONLY buffer constructors you should use in this guide.
 
 > [!NOTE]
-> Include the explicit buffer policies header and define the extension macro:
+> Define the extension macro before including the main SYCL header:
 > ```cpp
-> #include <hipSYCL/sycl/extensions/explicit_buffer_policies.hpp>
 > #define ACPP_EXT_EXPLICIT_BUFFER_POLICIES
+> #include <sycl/sycl.hpp>
 > ```
+> The factory methods are part of `<sycl/sycl.hpp>` and accessible via the `sycl::` namespace once the macro is defined.
 
 ### Factory Method Overview
 
@@ -74,9 +75,8 @@ The factory methods vary along three orthogonal properties:
 ### Example: Using Buffer Factory Methods
 
 ```cpp
-#include <sycl/sycl.hpp>
-#include <hipSYCL/sycl/extensions/explicit_buffer_policies.hpp>
 #define ACPP_EXT_EXPLICIT_BUFFER_POLICIES
+#include <sycl/sycl.hpp>
 
 int main() {
     sycl::queue q;
@@ -208,7 +208,7 @@ AdaptiveCpp provides extensions for interoperability between buffers and USM:
 
 ```cpp
 #define ACPP_EXT_BUFFER_USM_INTEROP
-#include <hipSYCL/sycl/extensions/buffer_usm_interop.hpp>
+#include <sycl/sycl.hpp>
 
 // Get USM pointer for a specific device
 auto* ptr = buffer.get_pointer(device);

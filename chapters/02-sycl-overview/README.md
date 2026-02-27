@@ -61,19 +61,22 @@ for (const auto& device : gpu_devices) {
 A buffer owns data and manages synchronization between host and device memory. The SYCL runtime decides WHEN to copy data to/from the device - you just declare your intent via accessors. In AdaptiveCpp, we use factory methods for explicit policy control:
 
 ```cpp
-#include <hipsycl/sycl.hpp>
+#define ACPP_EXT_EXPLICIT_BUFFER_POLICIES
+#include <sycl/sycl.hpp>
 
-// Method 1: Explicit namespace
-using namespace hipsycl::sycl;
 float* host_data = new float[1024];
-auto buf = make_sync_buffer<float>(host_data, sycl::range<1>(1024));
 
-// Method 2: Fully qualified
-auto buf2 = hipsycl::sycl::make_async_buffer<float>(host_data, sycl::range<1>(1024));
+// Synchronous view: host pointer, no writeback, destructor blocks
+auto buf = sycl::make_sync_view<float>(host_data, sycl::range<1>(1024));
+
+// Asynchronous buffer: internal storage, non-blocking destructor
+auto buf2 = sycl::make_async_buffer<float>(sycl::range<1>(1024));
 ```
 
 > [!NOTE]
-> This guide uses make_sync_buffer/make_async_buffer (AdaptiveCpp extensions) rather than raw sycl::buffer constructors for explicit policy control. The factory methods make the synchronization policy clear in the code.
+> AdaptiveCpp's buffer factory methods (`make_sync_buffer`, `make_async_buffer`, `make_sync_view`, etc.) are accessible via the standard `sycl::` namespace once `ACPP_EXT_EXPLICIT_BUFFER_POLICIES` is defined before including `<sycl/sycl.hpp>`. No `hipsycl::` prefix is needed.
+>
+> This guide uses these factory methods rather than raw `sycl::buffer` constructors for explicit policy control. The factory methods make the synchronization policy clear in the code.
 
 ### Accessors
 
@@ -201,8 +204,8 @@ When buffer scope ends, host can read data - synchronization happens automatical
 ## Putting It Together: A First SYCL Program (Conceptual)
 
 ```cpp
+#define ACPP_EXT_EXPLICIT_BUFFER_POLICIES
 #include <sycl/sycl.hpp>
-#include <hipsycl/sycl.hpp>
 #include <vector>
 
 int main() {
@@ -215,8 +218,7 @@ int main() {
     }
     
     // 2. Create buffer with AdaptiveCpp factory method
-    using namespace hipsycl::sycl;
-    auto buf = make_sync_buffer<float>(host_data.data(), sycl::range<1>(N));
+    auto buf = sycl::make_sync_view<float>(host_data.data(), sycl::range<1>(N));
     
     // 3. Create queue and submit work
     sycl::queue q(sycl::gpu_selector_v);

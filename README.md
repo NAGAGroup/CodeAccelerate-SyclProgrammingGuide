@@ -111,7 +111,7 @@ the resource a university GPU computing course could assign instead of a CUDA tu
 acpp-tutorial-project/
   pixi.toml               Pixi workspace (acpp-toolchain, cmake, nushell, catch2)
   CMakeLists.txt          Root CMake - builds all examples
-  guide/                  Guide chapters (see above)
+  chapters/               Guide chapters (see above)
   scripts/
     configure.nu          CMake configuration
     build.nu              Build script
