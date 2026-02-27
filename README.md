@@ -93,9 +93,12 @@ compelling feature - automatic DAG-based execution graph construction and automa
 migration - with no additional cost. USM is fully covered as the right tool for explicit
 control and interop.
 
-**Scoped parallelism as the primary abstraction.** `nd_range` kernels with barriers are a
+**Scoped parallelism as the intended primary abstraction.** `nd_range` kernels with barriers are a
 CPU performance disaster and a common footgun. `ACPP_EXT_SCOPED_PARALLELISM_V2` is the
-performance-portable alternative and is used for all non-trivial parallel code in the guide.
+performance-portable alternative that eliminates fiber overhead on CPU while mapping efficiently to GPU warps/wavefronts.
+
+> [!WARNING]
+> `ACPP_EXT_SCOPED_PARALLELISM_V2` is **not yet supported** in `--acpp-targets=generic` (SSCP). This guide documents it as the intended preferred model. For now, all examples that require local memory and barriers use `nd_range`. Tracking issue: [AdaptiveCpp #1417](https://github.com/AdaptiveCpp/AdaptiveCpp/issues/1417).
 
 **No assumed GPU knowledge.** Every concept (SIMT, memory hierarchy, host-device transfer,
 asynchronous execution) is explained before it appears in code. This guide is designed to be

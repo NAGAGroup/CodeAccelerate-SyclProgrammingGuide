@@ -39,11 +39,11 @@ This guide makes deliberate choices to provide the clearest path to productive A
 
 1. We ALWAYS use `--acpp-targets=generic` - no backend-specific targets are covered in this guide.
 2. We use AdaptiveCpp buffer factory methods exclusively: `make_sync_buffer`, `make_async_buffer`, `make_sync_view`, `make_async_view`, `make_sync_writeback_view`, and `make_async_writeback_view`. We do NOT use raw `sycl::buffer` constructors directly.
-3. We use scoped parallelism (`ACPP_EXT_SCOPED_PARALLELISM_V2`) as our primary parallelism abstraction.
+3. We document scoped parallelism (`ACPP_EXT_SCOPED_PARALLELISM_V2`) as the intended primary parallelism abstraction - and use `nd_range` in examples until SSCP support for scoped parallelism lands (see [AdaptiveCpp #1417](https://github.com/AdaptiveCpp/AdaptiveCpp/issues/1417)).
 4. We treat buffers as the primary memory model, with USM (Unified Shared Memory) covered as an advanced topic.
 
 > [!NOTE]
-> These choices were made to prioritize simplicity and correctness. The buffer factory methods avoid common pitfalls with implicit data movement, scoped parallelism provides performance portability across CPU and GPU, and focusing on the generic target ensures your code works everywhere without modification.
+> These choices were made to prioritize simplicity and correctness. The buffer factory methods avoid common pitfalls with implicit data movement, scoped parallelism will provide performance portability across CPU and GPU (fiber-free on CPU) once SSCP support lands, and focusing on the generic target ensures your code works everywhere without modification.
 
 ## Prerequisites
 

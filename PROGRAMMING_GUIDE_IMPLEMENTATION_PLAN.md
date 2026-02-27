@@ -268,6 +268,7 @@ function that accepts either a buffer or a USM pointer and dispatches to the sam
 - `memory_environment` for portable local memory
 - Nesting rules and footguns (strict hierarchy, collective reach requirements)
 - When to use scoped parallelism vs nd_range
+- Current status note: SSCP generic target does not yet support scoped_parallel_for; document as roadmap item, use nd_range examples
 - Librarian research: `ACPP_EXT_SCOPED_PARALLELISM_V2` full docs, performance-portability rationale
 
 **Step 4.2 - `guide/05-kernels-and-parallelism/examples/`**
@@ -405,7 +406,7 @@ cautionary example. Every subsequent buffer in the guide uses acpp factory metho
 
 **Decision: Scoped parallelism as the primary parallelism abstraction**
 `nd_range` with barriers is shown for completeness and SYCL spec coverage. Scoped parallelism
-(`ACPP_EXT_SCOPED_PARALLELISM_V2`) is the recommended approach for all new code.
+(`ACPP_EXT_SCOPED_PARALLELISM_V2`) is the intended recommended approach for all new code once SSCP support lands; nd_range is the current fallback for the generic target.
 
 **Decision: Pixi for environment management**
 The guide's setup story is: install pixi, run `pixi install`, start writing GPU code.
