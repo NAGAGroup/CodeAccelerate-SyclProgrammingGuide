@@ -108,15 +108,36 @@ acpp-tutorial-project/
 │   │       ├── hello_devices.cpp
 │   │       └── hello_kernel.cpp
 │   ├── 04-memory-model/
-│   │   └── examples/CMakeLists.txt   <- placeholder
+│   │   ├── README.md
+│   │   └── examples/
+│   │       ├── CMakeLists.txt
+│   │       ├── buffer_policies.cpp
+│   │       └── usm_vector_add.cpp
 │   ├── 05-kernels-and-parallelism/
-│   │   └── examples/CMakeLists.txt   <- placeholder
+│   │   ├── README.md
+│   │   └── examples/
+│   │       ├── CMakeLists.txt
+│   │       ├── nd_range_demo.cpp
+│   │       └── scoped_reduction.cpp
 │   ├── 06-acpp-extensions/
-│   │   └── examples/CMakeLists.txt   <- placeholder
+│   │   ├── README.md
+│   │   └── examples/
+│   │       ├── CMakeLists.txt
+│   │       ├── jit_specialized.cpp
+│   │       └── accessor_variants_demo.cpp
 │   ├── 07-performance/
-│   │   └── examples/CMakeLists.txt   <- placeholder
+│   │   ├── README.md
+│   │   └── examples/
+│   │       ├── CMakeLists.txt
+│   │       └── bandwidth_benchmark.cpp
 │   ├── 08-footguns/
+│   │   └── README.md
 │   └── 09-real-world-patterns/
+│       ├── README.md
+│       └── examples/
+│           ├── CMakeLists.txt
+│           ├── matmul.cpp
+│           └── jacobi_solver.cpp
 └── build/                     <- cmake build output (not committed)
 ```
 
@@ -192,12 +213,12 @@ is active when the binary runs.
 | 01-heterogeneous-computing | Done | N/A | Complete |
 | 02-sycl-overview | Done | N/A | Complete |
 | 03-acpp-setup | Done | hello_devices, hello_kernel | Complete |
-| 04-memory-model | Not started | placeholder | Pending |
-| 05-kernels-and-parallelism | Not started | placeholder | Pending |
-| 06-acpp-extensions | Not started | placeholder | Pending |
-| 07-performance | Not started | placeholder | Pending |
-| 08-footguns | Not started | none | Pending |
-| 09-real-world-patterns | Not started | none | Pending |
+| 04-memory-model | Done | buffer_policies, usm_vector_add | Complete |
+| 05-kernels-and-parallelism | Done | nd_range_demo, scoped_reduction* | Complete |
+| 06-acpp-extensions | Done | jit_specialized, accessor_variants_demo | Complete |
+| 07-performance | Done | bandwidth_benchmark | Complete |
+| 08-footguns | Done | none (prose only) | Complete |
+| 09-real-world-patterns | Done | matmul, jacobi_solver | Complete |
 
 ---
 
