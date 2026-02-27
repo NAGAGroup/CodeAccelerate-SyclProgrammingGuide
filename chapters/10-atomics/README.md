@@ -165,3 +165,7 @@ Memory orders and scopes are preserved through the JIT process. The same binary 
 - FP atomics require `ACPP_EXT_FP_ATOMICS` extension or CAS fallback
 - SSCP preserves atomic semantics through JIT compilation to target backends
 - Always check device aspects (like `atomic64`) before using 64-bit atomics
+
+---
+
+[<- Chapter 09: Real-World Patterns](../09-real-world-patterns/README.md) | [Up to Guide](../../README.md)

@@ -174,6 +174,6 @@ Run the examples:
 - CMake integration is two lines: `find_package` + `add_sycl_to_target`
 - Verifying with `acpp --version` and `hello_devices` confirms setup
 
-## Next Steps
+---
 
-Proceed to [Chapter 4: Memory Model](../04-memory-model/README.md) to learn about AdaptiveCpp's memory management system.
+[<- Chapter 02: SYCL Overview](../02-sycl-overview/README.md) | [Up to Guide](../../README.md) | [Chapter 04: Memory Model ->](../04-memory-model/README.md)

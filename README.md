@@ -59,21 +59,19 @@ pixi run test
 
 ## Guide Structure
 
-```
-guide/
-  00-introduction/              What this guide is, why acpp, how to use it
-  01-heterogeneous-computing/   CPU vs GPU architecture, memory hierarchies, parallelism
-  02-sycl-overview/             SYCL 2020 concepts (acpp-annotated)
-  03-acpp-setup/                Installation, device discovery, first kernel
-  04-memory-model/              Buffer factory methods, USM, the library API pattern
-  05-kernels-and-parallelism/   parallel_for, nd_range, scoped parallelism
-  06-acpp-extensions/           Extension reference: specialized, JIT compile-if, dynamic
-                                functions, buffer-USM interop, multi-device, accessor variants
-  07-performance/               Adaptivity levels, JIT tuning, backend-specific notes
-  08-footguns/                  Comprehensive pitfall reference with mitigations
-  09-real-world-patterns/       Matrix multiply, Jacobi solver, iterative patterns
-  10-atomics/                   sycl::atomic_ref, memory orders, memory scopes, ACPP_EXT_FP_ATOMICS
-```
+| Chapter | Title | Focus |
+|---------|-------|-------|
+| [00](chapters/00-introduction/README.md) | Introduction | What this guide is, why acpp, how to use it |
+| [01](chapters/01-heterogeneous-computing/README.md) | Heterogeneous Computing | CPU vs GPU architecture, memory hierarchies, parallelism |
+| [02](chapters/02-sycl-overview/README.md) | SYCL Overview | SYCL 2020 concepts (acpp-annotated) |
+| [03](chapters/03-acpp-setup/README.md) | AdaptiveCpp Setup | Installation, device discovery, first kernel |
+| [04](chapters/04-memory-model/README.md) | Memory Model | Buffer factory methods, USM, the library API pattern |
+| [05](chapters/05-kernels-and-parallelism/README.md) | Kernels and Parallelism | parallel_for, nd_range, scoped parallelism |
+| [06](chapters/06-acpp-extensions/README.md) | AdaptiveCpp Extensions | Extension reference: specialized, JIT compile-if, dynamic functions, buffer-USM interop, multi-device, accessor variants |
+| [07](chapters/07-performance/README.md) | Performance | Adaptivity levels, JIT tuning, backend-specific notes |
+| [08](chapters/08-footguns/README.md) | Footguns | Comprehensive pitfall reference with mitigations |
+| [09](chapters/09-real-world-patterns/README.md) | Real-World Patterns | Matrix multiply, Jacobi solver, iterative patterns |
+| [10](chapters/10-atomics/README.md) | Atomics | sycl::atomic_ref, memory orders, memory scopes, ACPP_EXT_FP_ATOMICS |
 
 Read it linearly if you are new to GPU computing. Use individual chapters as reference if
 you already know the basics.

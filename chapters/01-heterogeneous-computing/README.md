@@ -210,3 +210,7 @@ Key takeaways from this chapter:
 - **SYCL** simplifies heterogeneous programming by automating memory management while preserving performance.
 
 Understanding these architectural differences is essential for writing efficient SYCL code that properly leverages both CPU and GPU capabilities.
+
+---
+
+[<- Back to Introduction](../00-introduction/README.md) | [Up to Guide](../../README.md) | [Chapter 02: SYCL Overview ->](../02-sycl-overview/README.md)

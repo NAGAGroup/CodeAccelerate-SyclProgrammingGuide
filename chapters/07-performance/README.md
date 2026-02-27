@@ -122,3 +122,7 @@ ACPP_ADAPTIVITY_LEVEL=2 pixi run ./build/chapters/07-performance/examples/bandwi
 - Work group sizes should be multiples of warp/wavefront size (32/64)
 - In-order queues with coarse-grained events minimize kernel launch latency
 - Vendor profilers work directly with AdaptiveCpp SSCP binaries
+
+---
+
+[<- Chapter 06: AdaptiveCpp Extensions](../06-acpp-extensions/README.md) | [Up to Guide](../../README.md) | [Chapter 08: Footguns ->](../08-footguns/README.md)

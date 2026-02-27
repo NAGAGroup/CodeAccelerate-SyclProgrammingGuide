@@ -194,3 +194,7 @@ pixi run ./build/chapters/06-acpp-extensions/examples/accessor_variants_demo
 - ACPP_EXT_MULTI_DEVICE_QUEUE distributes work across multiple devices (experimental)
 - ACPP_EXT_COARSE_GRAINED_EVENTS reduces kernel launch latency with lighter events
 - ACPP_EXT_ACCESSOR_VARIANTS reduces register pressure with raw/unranged/ranged accessors
+
+---
+
+[<- Chapter 05: Kernels and Parallelism](../05-kernels-and-parallelism/README.md) | [Up to Guide](../../README.md) | [Chapter 07: Performance ->](../07-performance/README.md)

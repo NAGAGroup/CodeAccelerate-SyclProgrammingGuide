@@ -236,3 +236,7 @@ Next, Chapter 05 covers kernels and parallelism, where we'll explore how to actu
 
 > [!NOTE]
 > This chapter covers memory **storage** - how data is allocated, transferred, and managed between host and device. Memory **ordering** - how atomic operations synchronize concurrent work-items, and how `sycl::atomic_fence` coordinates fine-grained access - is a separate concern covered in [Chapter 10: Atomics and Memory Ordering](../10-atomics/README.md). If you need cross-work-group synchronization or concurrent data access without barriers, read Chapter 10 after Chapter 05.
+
+---
+
+[<- Chapter 03: AdaptiveCpp Setup](../03-acpp-setup/README.md) | [Up to Guide](../../README.md) | [Chapter 05: Kernels and Parallelism ->](../05-kernels-and-parallelism/README.md)

@@ -254,5 +254,9 @@ int main() {
 
 ## Next Steps
 
-- Chapter 3: AdaptiveCpp Setup - Installation and configuration
-- Chapter 4: Memory Model - Deep dive into buffers, USM, and data management
+- [Chapter 3: AdaptiveCpp Setup](../03-acpp-setup/README.md) - Installation and configuration
+- [Chapter 4: Memory Model](../04-memory-model/README.md) - Deep dive into buffers, USM, and data management
+
+---
+
+[<- Chapter 01: Heterogeneous Computing](../01-heterogeneous-computing/README.md) | [Up to Guide](../../README.md) | [Chapter 03: AdaptiveCpp Setup ->](../03-acpp-setup/README.md)

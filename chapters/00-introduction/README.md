@@ -61,16 +61,17 @@ This guide consists of 10 chapters that build from foundational concepts to prac
 
 | Chapter | Title | Focus |
 |---------|-------|-------|
-| 00 | Introduction | Project overview and philosophy |
-| 01 | Heterogeneous Computing | Background on modern computing architectures |
-| 02 | SYCL Overview | The SYCL standard and key concepts |
-| 03 | AdaptiveCpp Setup | Installation, configuration, and first compilation |
-| 04 | Memory Model | Buffers, USM, and data management |
-| 05 | Kernels and Parallelism | Writing and launching computational kernels |
-| 06 | AdaptiveCpp Extensions | Advanced features and specialized capabilities |
-| 07 | Performance | Optimization techniques and best practices |
-| 08 | Footguns | Common pitfalls and how to avoid them |
-| 09 | Real-World Patterns | Practical patterns for production applications |
+| [00](../00-introduction/README.md) | Introduction | Project overview and philosophy |
+| [01](../01-heterogeneous-computing/README.md) | Heterogeneous Computing | Background on modern computing architectures |
+| [02](../02-sycl-overview/README.md) | SYCL Overview | The SYCL standard and key concepts |
+| [03](../03-acpp-setup/README.md) | AdaptiveCpp Setup | Installation, configuration, and first compilation |
+| [04](../04-memory-model/README.md) | Memory Model | Buffers, USM, and data management |
+| [05](../05-kernels-and-parallelism/README.md) | Kernels and Parallelism | Writing and launching computational kernels |
+| [06](../06-acpp-extensions/README.md) | AdaptiveCpp Extensions | Advanced features and specialized capabilities |
+| [07](../07-performance/README.md) | Performance | Optimization techniques and best practices |
+| [08](../08-footguns/README.md) | Footguns | Common pitfalls and how to avoid them |
+| [09](../09-real-world-patterns/README.md) | Real-World Patterns | Practical patterns for production applications |
+| [10](../10-atomics/README.md) | Atomics | sycl::atomic_ref, memory orders, memory scopes |
 
 ## A Note on Scope
 
@@ -78,4 +79,4 @@ This guide focuses specifically on the SSCP generic target and deliberately omit
 
 ## Getting Started
 
-If you're new to heterogeneous computing, proceed to Chapter 1 for background on modern computing architectures. If you're already familiar with these concepts and want to start coding, jump to Chapter 3 for AdaptiveCpp setup and your first compilation.
+If you're new to heterogeneous computing, proceed to [Chapter 1: Heterogeneous Computing](../01-heterogeneous-computing/README.md) for background on modern computing architectures. If you're already familiar with these concepts and want to start coding, jump to [Chapter 3: AdaptiveCpp Setup](../03-acpp-setup/README.md) for AdaptiveCpp setup and your first compilation.

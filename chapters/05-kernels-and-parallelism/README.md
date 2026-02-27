@@ -185,3 +185,7 @@ pixi run ./build/chapters/05-kernels-and-parallelism/examples/nd_range_demo
 - **Current status:** ACPP_EXT_SCOPED_PARALLELISM_V2 is not yet supported in `--acpp-targets=generic`; use nd_range until upstream support lands
 - CPU workloads should prefer scoped parallelism (when available) to avoid fiber overhead
 - The dispatch hierarchy provides explicit control over work group organization
+
+---
+
+[<- Chapter 04: Memory Model](../04-memory-model/README.md) | [Up to Guide](../../README.md) | [Chapter 06: AdaptiveCpp Extensions ->](../06-acpp-extensions/README.md)

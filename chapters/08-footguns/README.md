@@ -605,3 +605,7 @@ do {
 | 21 | Double-fencing around `group_barrier` | Use `group_barrier` alone; `atomic_fence` only where no barrier exists |
 | 22 | `sub_group` scope on CPU/Intel iGPU | Query `atomic_memory_scope_capabilities` before using `sub_group` scope |
 | 23 | `compare_exchange_weak` without retry | Use `strong` for one-shot; use `weak` only inside a do-while retry loop |
+
+---
+
+[<- Chapter 07: Performance](../07-performance/README.md) | [Up to Guide](../../README.md) | [Chapter 09: Real-World Patterns ->](../09-real-world-patterns/README.md)

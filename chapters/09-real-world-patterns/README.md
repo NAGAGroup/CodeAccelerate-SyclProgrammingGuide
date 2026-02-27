@@ -126,3 +126,7 @@ pixi run ./build/chapters/09-real-world-patterns/examples/jacobi_solver
 This chapter completes the AdaptiveCpp Programmer's Guide with two realistic examples that demonstrate the key patterns you'll encounter in real-world SYCL development. The tiled matrix multiplication shows how to extract performance from compute-bound workloads through careful data reuse and work group synchronization. The Jacobi solver demonstrates how AdaptiveCpp's automatic dependency tracking simplifies complex multi-kernel workflows.
 
 With these patterns and the concepts from previous chapters, you now have the foundation to build efficient, correct heterogeneous applications using AdaptiveCpp and SYCL.
+
+---
+
+[<- Chapter 08: Footguns](../08-footguns/README.md) | [Up to Guide](../../README.md) | [Chapter 10: Atomics ->](../10-atomics/README.md)
