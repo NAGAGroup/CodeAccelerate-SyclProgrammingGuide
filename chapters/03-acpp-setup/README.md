@@ -61,27 +61,14 @@ To query available devices, you can use the hello_devices example we'll build in
 ./build/chapters/03-acpp-setup/examples/hello_devices
 ```
 
-> [!TIP]
-> If `acpp --version` succeeds but no GPU is detected at runtime, the program will fall back to the CPU via the OpenMP backend.
-
-## Building from Source (Advanced)
-
-For CI environments or custom LLVM deployments, you can build AdaptiveCpp from source. Requirements:
-
-- LLVM >= 15
-- Boost libraries
-- CMake >= 3.20
-
-Standard CMake workflow:
+or simply
 
 ```bash
-cmake -S . -B build -DCMAKE_INSTALL_PREFIX=/opt/acpp -DLLVM_DIR=/path/to/llvm/lib/cmake/llvm
-cmake --build build
-cmake --install build
+pixi run acpp-info
 ```
 
-> [!NOTE]
-> The pixi path handles all this automatically; source builds are for CI or custom LLVM deployments.
+> [!TIP]
+> If `acpp --version` succeeds but no GPU is detected at runtime, the program will fall back to the CPU via the OpenMP backend.
 
 ## CMake Project Integration
 
