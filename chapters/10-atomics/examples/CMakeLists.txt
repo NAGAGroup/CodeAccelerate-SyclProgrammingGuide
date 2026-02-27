@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.20)
+add_acpp_example(atomic_counter atomic_counter.cpp)
+add_acpp_example(reduction_fetch_add reduction_fetch_add.cpp)
+add_acpp_example(compare_exchange compare_exchange.cpp)
+add_acpp_example(atomic_fence_ordering atomic_fence_ordering.cpp)
+add_acpp_example(fp_atomics fp_atomics.cpp)

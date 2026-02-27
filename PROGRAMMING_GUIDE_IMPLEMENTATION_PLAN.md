@@ -94,10 +94,18 @@ acpp-tutorial-project/
       README.md                      # Adaptivity levels, JIT tuning, backend-specific notes
       examples/
     08-footguns/
-      README.md                      # Comprehensive pitfall reference
+      README.md                      # Comprehensive pitfall reference (23 footguns including atomics)
     09-real-world-patterns/
       README.md                      # Putting it all together: real patterns for real programs
       examples/
+    10-atomics/
+      README.md                      # sycl::atomic_ref, memory orders, memory scopes, ACPP_EXT_FP_ATOMICS
+      examples/
+        atomic_counter.cpp           # Race condition demo + correct atomic_ref counter
+        reduction_fetch_add.cpp      # Two-phase sum reduction with atomic fetch_add
+        compare_exchange.cpp         # CAS loop for atomic float max
+        atomic_fence_ordering.cpp    # Producer/consumer with atomic_fence (two-kernel pattern)
+        fp_atomics.cpp               # ACPP_EXT_FP_ATOMICS with CAS fallback
   scripts/
     configure.nu                     # CMake configuration script
     build.nu                         # Build script

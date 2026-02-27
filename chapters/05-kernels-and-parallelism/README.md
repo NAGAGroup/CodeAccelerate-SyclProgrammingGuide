@@ -55,6 +55,9 @@ queue.submit([&](sycl::handler& h) {
 });
 ```
 
+> [!NOTE]
+> `sycl::group_barrier` acts as an `acq_rel` memory fence at `work_group` scope. All memory operations by any work-item in the group before the barrier are visible to all other work-items after the barrier. This is sufficient for most within-work-group coordination. For patterns that require synchronization **across work groups** (cross-group reduction, lock-free queues, fine-grained per-item signaling), see [Chapter 10: Atomics and Memory Ordering](../10-atomics/README.md), which covers `sycl::atomic_ref` and `sycl::atomic_fence`.
+
 > [!WARNING]
 > On CPU backends, nd_range barriers are implemented using fibers. Each work item requires its own stack and context-switch overhead. For CPU workloads, prefer scoped parallelism.
 

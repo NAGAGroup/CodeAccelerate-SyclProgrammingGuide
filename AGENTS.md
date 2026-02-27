@@ -138,6 +138,15 @@ acpp-tutorial-project/
 │           ├── CMakeLists.txt
 │           ├── matmul.cpp
 │           └── jacobi_solver.cpp
+│   └── 10-atomics/
+│       ├── README.md
+│       └── examples/
+│           ├── CMakeLists.txt
+│           ├── atomic_counter.cpp
+│           ├── reduction_fetch_add.cpp
+│           ├── compare_exchange.cpp
+│           ├── atomic_fence_ordering.cpp
+│           └── fp_atomics.cpp
 └── build/                     <- cmake build output (not committed)
 ```
 
@@ -219,6 +228,7 @@ is active when the binary runs.
 | 07-performance | Done | bandwidth_benchmark | Complete |
 | 08-footguns | Done | none (prose only) | Complete |
 | 09-real-world-patterns | Done | matmul, jacobi_solver | Complete |
+| 10-atomics | Done | atomic_counter, reduction_fetch_add, compare_exchange, atomic_fence_ordering, fp_atomics | Complete |
 
 ---
 
@@ -293,6 +303,18 @@ These are anti-patterns the guide explicitly teaches readers to avoid:
 8. **`ACPP_ADAPTIVITY_LEVEL=1` default** - needs 2+ runs for peak performance
 9. **libc++ + CUDA backend** - not supported; use libstdc++
 10. **nd_range barriers on CPU** - fiber-based, high overhead; use scoped parallelism
+11. **Local accessor silent kernel failure** - fixed in >= 25.10.0
+12. **Level Zero buffer writeback bug #1799** - always call q.wait() before buffer destruction
+13. **Scoped parallelism conditional collectives** - never wrap collective calls in conditionals
+14. **Scoped parallelism nesting inside distribute_items** - no collectives; use _and_wait variants
+15. **Buffer-USM interop data state** - view() for current data, empty_view() for uninitialized
+16. **`seq_cst` on device scope** - forces global GPU sync; use `acq_rel` instead
+17. **64-bit atomics without `atomic64` aspect check** - undefined behavior
+18. **Wrong scope for cross-group sync** - use `memory_scope::device` not `work_group`
+19. **`ACPP_EXT_FP_ATOMICS` silent emulation** - guard with `#ifdef`; provide CAS fallback
+20. **Double-fencing around `group_barrier`** - redundant; barrier already provides acq_rel fence
+21. **`sub_group` scope on CPU/Intel iGPU** - unsupported; query at runtime
+22. **`compare_exchange_weak` without retry loop** - spurious failures; must loop
 
 ---
 

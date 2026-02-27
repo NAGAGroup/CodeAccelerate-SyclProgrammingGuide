@@ -71,7 +71,8 @@ guide/
                                 functions, buffer-USM interop, multi-device, accessor variants
   07-performance/               Adaptivity levels, JIT tuning, backend-specific notes
   08-footguns/                  Comprehensive pitfall reference with mitigations
-  09-real-world-patterns/       Matrix multiply, image pipelines, iterative solvers, stdpar
+  09-real-world-patterns/       Matrix multiply, Jacobi solver, iterative patterns
+  10-atomics/                   sycl::atomic_ref, memory orders, memory scopes, ACPP_EXT_FP_ATOMICS
 ```
 
 Read it linearly if you are new to GPU computing. Use individual chapters as reference if
@@ -140,8 +141,10 @@ available hardware backends.
 - SSCP generic target (`--acpp-targets=generic`) on Linux x86-64
 - AdaptiveCpp extensions: ACPP_EXT_EXPLICIT_BUFFER_POLICIES, ACPP_EXT_SCOPED_PARALLELISM_V2,
   ACPP_EXT_SPECIALIZED, ACPP_EXT_JIT_COMPILE_IF, ACPP_EXT_DYNAMIC_FUNCTIONS,
-  ACPP_EXT_BUFFER_USM_INTEROP, ACPP_EXT_MULTI_DEVICE_QUEUE, ACPP_EXT_ACCESSOR_VARIANTS
+  ACPP_EXT_BUFFER_USM_INTEROP, ACPP_EXT_MULTI_DEVICE_QUEUE, ACPP_EXT_ACCESSOR_VARIANTS,
+  ACPP_EXT_FP_ATOMICS
 - NVIDIA, AMD, Intel GPU, and CPU targets via SSCP
+- SYCL 2020 atomics: `sycl::atomic_ref`, memory orders, memory scopes, `sycl::atomic_fence`
 
 **Not covered:**
 - Intel oneAPI / DPC++ specifics

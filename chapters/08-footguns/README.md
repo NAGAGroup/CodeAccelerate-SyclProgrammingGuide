@@ -426,6 +426,158 @@ auto alloc = hipsycl::sycl::buffer_allocation::view(d_ptr, q.get_device());
 
 ---
 
+## Atomics Footguns
+
+### 17. `seq_cst` on Device Scope
+
+**The Pitfall:** Using `sycl::memory_order::seq_cst` with `sycl::memory_scope::device` forces a global synchronization point on most GPU backends. The operation is correct but serializes all GPU memory traffic.
+
+```cpp
+// BAD: seq_cst at device scope - correct but very expensive on GPU
+sycl::atomic_ref<int, sycl::memory_order::seq_cst, sycl::memory_scope::device,
+                 sycl::access::address_space::global_space> ref{counter};
+ref.fetch_add(1);
+
+// GOOD: acq_rel at device scope - sufficient for almost all use cases
+sycl::atomic_ref<int, sycl::memory_order::acq_rel, sycl::memory_scope::device,
+                 sycl::access::address_space::global_space> ref{counter};
+ref.fetch_add(1);
+```
+
+**Why it matters:** `seq_cst` implies a global memory order visible to all threads across all work groups simultaneously. On PTX (NVIDIA) and amdgcn (AMD), this translates to a fence that stalls the entire GPU pipeline. `acq_rel` with the appropriate scope achieves the same correctness guarantee at a fraction of the cost for the vast majority of patterns.
+
+**Fix:** Use `memory_order::acq_rel` with an explicit scope. Reserve `seq_cst` only for the rare case where you need total global order across all devices.
+
+---
+
+### 18. 64-bit Atomics Without `atomic64` Aspect Check
+
+**The Pitfall:** Using `sycl::atomic_ref` with `long`, `unsigned long long`, or `double` on a device that does not support 64-bit atomics produces undefined behavior. No exception is raised.
+
+```cpp
+// BAD: assumes atomic64 is available - undefined behavior if not
+sycl::atomic_ref<long, sycl::memory_order::relaxed, sycl::memory_scope::device,
+                 sycl::access::address_space::global_space> ref{val};
+
+// GOOD: check first
+if (!q.get_device().has(sycl::aspect::atomic64)) {
+    // Fall back to int or use a software reduction
+}
+```
+
+**Why it matters:** Most modern discrete GPUs support `atomic64`, but integrated GPUs (Intel, ARM Mali) and some older hardware do not. Skipping the check is a portability bug that silently produces wrong results.
+
+**Fix:** Always check `device.has(sycl::aspect::atomic64)` before using 64-bit types in `atomic_ref`.
+
+---
+
+### 19. Wrong Scope for Cross-Group Synchronization
+
+**The Pitfall:** Using `memory_scope::work_group` when you need to synchronize across multiple work groups. An atomic at `work_group` scope only guarantees ordering within a single work group - other work groups may observe a different order.
+
+```cpp
+// BAD: work_group scope for a counter incremented by all work groups
+sycl::atomic_ref<int, sycl::memory_order::relaxed, sycl::memory_scope::work_group,
+                 sycl::access::address_space::global_space> ref{global_counter};
+ref.fetch_add(1); // no ordering guarantee across groups
+
+// GOOD: device scope for global coordination
+sycl::atomic_ref<int, sycl::memory_order::relaxed, sycl::memory_scope::device,
+                 sycl::access::address_space::global_space> ref{global_counter};
+ref.fetch_add(1);
+```
+
+**Why it matters:** This is a silent correctness bug. The code compiles and runs without error; it just gives wrong answers intermittently.
+
+**Fix:** Use `memory_scope::device` for any atomic that multiple work groups access.
+
+---
+
+### 20. `ACPP_EXT_FP_ATOMICS` Silent Emulation
+
+**The Pitfall:** Defining `ACPP_EXT_FP_ATOMICS` and using `float` or `double` `fetch_add` on a backend that does not have native hardware floating-point atomic support. AdaptiveCpp silently emulates the operation in software, which can be many times slower than expected.
+
+```cpp
+// This compiles and runs on all backends - but may be emulated
+#define ACPP_EXT_FP_ATOMICS
+#include <sycl/sycl.hpp>
+
+sycl::atomic_ref<float, sycl::memory_order::relaxed, sycl::memory_scope::device,
+                 sycl::access::address_space::global_space> ref{result};
+ref.fetch_add(val); // hardware on NVIDIA/AMD; emulated on CPU, Intel iGPU
+```
+
+**Why it matters:** Silent emulation can turn an expected O(1) hardware instruction into a slow CAS retry loop, degrading throughput by orders of magnitude without any diagnostic.
+
+**Fix:** Guard `ACPP_EXT_FP_ATOMICS` usage with a `#ifdef` and always provide a CAS-loop fallback. Profile on each target you care about.
+
+---
+
+### 21. Double-Fencing Around `group_barrier`
+
+**The Pitfall:** Manually calling `sycl::atomic_fence` immediately before or after `sycl::group_barrier`. The barrier already acts as an `acq_rel` fence at `work_group` scope - the manual fence is redundant and clutters the code.
+
+```cpp
+// BAD: redundant fence
+sycl::atomic_fence(sycl::memory_order::acq_rel, sycl::memory_scope::work_group);
+sycl::group_barrier(g); // already provides acq_rel fence
+
+// GOOD: barrier is sufficient
+sycl::group_barrier(g);
+```
+
+**Why it matters:** While functionally harmless, the redundant fence confuses readers into thinking the barrier alone is insufficient, and may add measurable latency on some backends.
+
+**Fix:** Use `sycl::group_barrier` alone. Reserve `sycl::atomic_fence` for patterns where you need a fence **without** a barrier (producer/consumer with flags, as shown in Chapter 10).
+
+---
+
+### 22. `memory_scope::sub_group` on CPU and Some Intel GPUs
+
+**The Pitfall:** Using `memory_scope::sub_group` on a CPU backend or on Intel integrated GPUs where the scope is not supported. The behavior is implementation-defined when an unsupported scope is used.
+
+```cpp
+// BAD: sub_group scope assumed to work everywhere
+sycl::atomic_ref<int, sycl::memory_order::acq_rel, sycl::memory_scope::sub_group,
+                 sycl::access::address_space::global_space> ref{val};
+
+// GOOD: check at runtime
+auto caps = ctx.get_info<sycl::info::context::atomic_memory_scope_capabilities>();
+bool has_sub_group = std::find(caps.begin(), caps.end(),
+    sycl::memory_scope::sub_group) != caps.end();
+```
+
+**Why it matters:** CPUs have no hardware sub-group concept. AdaptiveCpp's LLVM JIT backend does not support `sub_group` scope. Intel integrated GPUs vary by generation.
+
+**Fix:** Always query `sycl::info::context::atomic_memory_scope_capabilities` before using `sub_group` or `system` scope in portable code. See [Chapter 10: Atomics and Memory Ordering](../10-atomics/README.md) for the full scope support matrix.
+
+---
+
+### 23. `compare_exchange_weak` Without a Retry Loop
+
+**The Pitfall:** Using `compare_exchange_weak` as a one-shot operation. Unlike `compare_exchange_strong`, the weak variant is permitted to fail spuriously even when the expected value matches. Without a retry loop, the CAS silently does nothing on a spurious failure.
+
+```cpp
+// BAD: no retry loop - silently fails on spurious failure
+float expected = 0.0f;
+sycl::atomic_ref<float, ...> ref{val};
+ref.compare_exchange_weak(expected, new_val); // may do nothing!
+
+// GOOD: retry loop for weak CAS
+float expected = ref.load(sycl::memory_order::relaxed);
+float desired;
+do {
+    desired = compute_new_value(expected);
+} while (!ref.compare_exchange_weak(expected, desired));
+// compare_exchange_weak updates 'expected' on failure - retry is correct
+```
+
+**Why it matters:** `compare_exchange_weak` is valid only inside a loop that retries on failure. A one-shot use is a latent correctness bug that appears to work on most hardware (spurious failures are rare in practice on x86/PTX) but can fail on ARM or when under high contention.
+
+**Fix:** Use `compare_exchange_strong` for one-shot operations. Use `compare_exchange_weak` only inside a do-while retry loop, as shown in the [Chapter 10 compare_exchange example](../10-atomics/examples/compare_exchange.cpp).
+
+---
+
 ## Summary
 
 | # | Footgun | Fix |
@@ -446,3 +598,10 @@ auto alloc = hipsycl::sycl::buffer_allocation::view(d_ptr, q.get_device());
 | 14 | Scoped parallelism: conditional collectives | Never wrap collective calls in conditionals; use `single_item()` |
 | 15 | Scoped parallelism: nesting inside distribute_items | No collective calls inside `distribute_items()`; use `_and_wait` variants |
 | 16 | Buffer-USM interop data state | Use `view()` for current data, `empty_view()` for uninitialized |
+| 17 | `seq_cst` on device scope | Use `acq_rel` with explicit scope instead |
+| 18 | 64-bit atomics without `atomic64` aspect | Check `device.has(sycl::aspect::atomic64)` before using `long`/`double` |
+| 19 | Wrong scope for cross-group sync | Use `memory_scope::device` for atomics accessed by multiple work groups |
+| 20 | `ACPP_EXT_FP_ATOMICS` silent emulation | Guard with `#ifdef`; provide CAS-loop fallback; profile on each target |
+| 21 | Double-fencing around `group_barrier` | Use `group_barrier` alone; `atomic_fence` only where no barrier exists |
+| 22 | `sub_group` scope on CPU/Intel iGPU | Query `atomic_memory_scope_capabilities` before using `sub_group` scope |
+| 23 | `compare_exchange_weak` without retry | Use `strong` for one-shot; use `weak` only inside a do-while retry loop |

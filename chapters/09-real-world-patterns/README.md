@@ -105,6 +105,9 @@ for (int iter = 0; iter < max_iter; ++iter) {
 | matmul | nd_range tiling with local memory | Data reuse, work group synchronization, manual barriers | make_sync_view for inputs, make_sync_writeback_view for output |
 | jacobi_solver | Automatic DAG with async buffers | Implicit dependencies, iterative algorithms, reduction operations | make_async_buffer for work buffers, explicit copy for result |
 
+> [!NOTE]
+> The Jacobi solver uses `sycl::reduction` for the convergence norm - a built-in reduction that operates within a single kernel invocation. For the complementary pattern of accumulating per-work-group partial results into a single global value across multiple work groups using `sycl::atomic_ref::fetch_add`, see [Chapter 10: Atomics and Memory Ordering](../10-atomics/README.md). That chapter's `reduction_fetch_add` example demonstrates the two-phase approach: local partial sum per work-item, then one atomic add per work-group to a global result.
+
 ## Building and Running
 
 ```bash
